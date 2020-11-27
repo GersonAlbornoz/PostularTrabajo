@@ -15,6 +15,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatRadioModule} from '@angular/material/radio';
+
 
 @NgModule({
     imports: [
@@ -31,7 +33,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
         FormsModule,
         ReactiveFormsModule,
         MatTableModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatRadioModule
     ],  
     exports: [
         MatTabsModule,
@@ -47,7 +50,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
         FormsModule,
         ReactiveFormsModule,
         MatTableModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatRadioModule
     ]
 })
 export class MaterialModule {}

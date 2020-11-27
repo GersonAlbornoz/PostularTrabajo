@@ -37,6 +37,7 @@ export class BuscarComponent implements OnInit {
     studentsPg:any=[];
     sinFiltrar:boolean=true;
     firstPge:boolean=true;
+    studentSelected:number;
 
   constructor(private estudiantesService:EstudiantesService) { }
 
@@ -89,7 +90,7 @@ export class BuscarComponent implements OnInit {
     console.log(pg);
     return pg;
   }
-  
+
   onPaginateChange(event){
     let c:number=0;
     this.studentsPg=[];
