@@ -1,0 +1,53 @@
+<h1>Estudiantes</h1>
+<form class="example-form">
+    <mat-form-field class="example-full-width">
+        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" (click)="sinFiltrar=false">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option.split(' ')[0]">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</form>
+<i class="material-icons">search</i>
+<button mat-raised-button id="btn1" color="primary" (click)="openDialog()">Nuevo</button>
+<hr>
+<br>
+<div class="content" fxLayout="row wrap" fxLayoutGap="16px grid" *ngIf="sinFiltrar">
+    <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let student of students">
+        <mat-card class="example-card">
+            <img mat-card-image src="{{student.foto_ruta}}">
+            <mat-card-header>
+                <mat-card-title>{{student.nom_persona}} {{student.ape_pate_pers}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>{{calcularEdad(student.fecha_naci) }}</p>
+                <p>{{grade(student.desc_grado,student.nivel)}}</p>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button id="btn2" color="warn">
+                    Borrar
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
+<div class="content" fxLayout="row wrap" fxLayoutGap="16px grid" *ngIf="!sinFiltrar">
+    <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let student of filteredCards | async">
+        <mat-card class="example-card">
+            <img mat-card-image src="{{student.foto_ruta}}">
+            <mat-card-header>
+                <mat-card-title>{{student.nom_persona}} {{student.ape_pate_pers}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>{{calcularEdad(student.fecha_naci) }}</p>
+                <p>{{grade(student.desc_grado,student.nivel)}}</p>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button id="btn2" color="warn">
+                    Borrar
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<form class="example-form">
+    <mat-form-field class="example-full-width">
+        <mat-label>Buscar</mat-label>
+        <input type="text" placeholder="Buscar Alumnos" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" (click)="sinFiltrar=false && this.paginator.pageIndex=0">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option.split(' ')[0]">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</form>
+<mat-card>
+    <div *ngIf="sinFiltrar">
+        <table mat-table [dataSource]="studentsPg" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.nid_persona}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Nombres </th>
+                <td mat-cell *matCellDef="let element"> {{element.nom_persona}} {{element.ape_pate_pers}}</td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="weight">
+                <th mat-header-cell *matHeaderCellDef> Grado </th>
+                <td mat-cell *matCellDef="let element"> {{grade(element.desc_grado,element.nivel)}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="symbol">
+                <th mat-header-cell *matHeaderCellDef> # </th>
+                <td mat-cell *matCellDef="let element"> + </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="students.length" [pageSize]="3" [pageSizeOptions]="[1, 2, 3, 4]" (page)="onPaginateChange($event)">
+        </mat-paginator>
+    </div>
+    <div *ngIf="!sinFiltrar">
+        <table mat-table [dataSource]="filteredPages | async" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.nid_persona}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Nombres </th>
+                <td mat-cell *matCellDef="let element"> {{element.nom_persona}} {{element.ape_pate_pers}}</td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="weight">
+                <th mat-header-cell *matHeaderCellDef> Grado </th>
+                <td mat-cell *matCellDef="let element"> {{grade(element.desc_grado,element.nivel)}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="symbol">
+                <th mat-header-cell *matHeaderCellDef> # </th>
+                <td mat-cell *matCellDef="let element"> + </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="(filteredCards | async).length" [pageSize]="1" [pageSizeOptions]="[1, 2, 3, 4]" (page)="onPaginate($event)">
+        </mat-paginator>
+    </div>
+
+</mat-card>
