@@ -89,6 +89,7 @@ export class BuscarComponent implements OnInit {
     console.log(pg);
     return pg;
   }
+  
   onPaginateChange(event){
     let c:number=0;
     this.studentsPg=[];
