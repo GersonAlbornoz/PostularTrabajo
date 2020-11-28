@@ -5,6 +5,7 @@ import {map, startWith} from 'rxjs/operators';
 import {MatPaginator} from '@angular/material/paginator';
 
 import {EstudiantesService} from '../../services/estudiantes.service';
+import {DatosService} from '../../services/datos.service';
 
 export interface Student{
   nid_persona?:number;
@@ -39,7 +40,7 @@ export class BuscarComponent implements OnInit {
     firstPge:boolean=true;
     studentSelected:number;
 
-  constructor(private estudiantesService:EstudiantesService) { }
+  constructor(private estudiantesService:EstudiantesService,public datosService:DatosService) { }
 
   ngOnInit(): void {
     this.estudiantesService.getAll().subscribe(
@@ -75,38 +76,9 @@ export class BuscarComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.students.filter(st=>st.nom_persona.toLowerCase().indexOf(filterValue) === 0);
   }
-  private filtrarPages(value:string,paginaIndex:number,paginaSize:number):any[]{
-    const filterValue = value.toLowerCase();
-    let pg:any[]=[];
-    let c:number=0;
-    for(let st of this.students){
-      if(!st.nom_persona.toLowerCase().indexOf(filterValue)){
-        if(paginaIndex*paginaSize<=c && c<(paginaIndex+1)*paginaSize){
-          pg.push(st);
-        }
-        c++;
-      }
-    }
-    console.log(pg);
-    return pg;
-  }
 
-  onPaginateChange(event){
-    let c:number=0;
-    this.studentsPg=[];
-    for(let st of this.students){
-      if(parseInt(event.pageIndex)*parseInt(event.pageSize)<=c && c<(parseInt(event.pageIndex)+1)*parseInt(event.pageSize)){
-        this.studentsPg.push(st);
-      }
-      c++;
-    }
-    console.log(this.studentsPg);
-  }
-  
-  onPaginate(event){
-    this.filteredPages = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this.filtrarPages(value,parseInt(event.pageIndex),parseInt(event.pageSize))));
+  seleccionado(){
+    let c:number=this.datosService.setStudent(this.studentSelected);
   }
 
   grade(grado:string,nivel:string){

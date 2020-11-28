@@ -1,7 +1,7 @@
 <form class="example-form">
     <mat-form-field class="example-full-width">
         <mat-label>Buscar</mat-label>
-        <input type="text" placeholder="Buscar Alumnos" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" (click)="sinFiltrar=false && this.paginator.pageIndex=0 && this.paginator.pageSize=1">
+        <input type="text" placeholder="Buscar Alumnos" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" (click)="sinFiltrar=false">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions | async" [value]="option.split(' ')[0]">
                 {{option}}
@@ -11,7 +11,7 @@
 </form>
 <mat-card>
     <div *ngIf="sinFiltrar">
-        <table mat-table [dataSource]="studentsPg" class="mat-elevation-z8">
+        <table mat-table [dataSource]="students" class="mat-elevation-z8">
 
             <ng-container matColumnDef="position">
                 <th mat-header-cell *matHeaderCellDef> ID </th>
@@ -44,11 +44,9 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <mat-paginator [length]="students.length" [pageSize]="3" [pageSizeOptions]="[1, 2, 3, 4]" (page)="onPaginateChange($event)">
-        </mat-paginator>
     </div>
     <div *ngIf="!sinFiltrar">
-        <table mat-table [dataSource]="filteredPages | async" class="mat-elevation-z8">
+        <table mat-table [dataSource]="filteredCards | async" class="mat-elevation-z8">
 
             <ng-container matColumnDef="position">
                 <th mat-header-cell *matHeaderCellDef> ID </th>
@@ -81,8 +79,6 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <mat-paginator [length]="(filteredCards | async).length" [pageSize]="1" [pageSizeOptions]="[1, 2, 3, 4]" (page)="onPaginate($event)">
-        </mat-paginator>
     </div>
-
+    <button mat-raised-button id="btn1" color="primary" *ngIf="studentSelected" (click)="datosService.setStudent(studentSelected)">Aceptar</button>
 </mat-card>

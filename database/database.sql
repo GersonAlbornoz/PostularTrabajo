@@ -30,7 +30,7 @@ CREATE TABLE movimiento(
     tipo_movimiento varchar(20) not null,
     monto decimal not null,
     estado varchar(20) not null ,
-    fecha_pago TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    fecha_pago TIMESTAMP,
     id_persona integer not null ,
     id_detalle_cronograma integer not null ,
     foreign key (id_persona) references persona,
@@ -55,3 +55,70 @@ insert into grado values (default,'Cuarto','SEC');
 insert into grado values (default,'Quinto','SEC');
 
 insert into cronograma values (default,2020);
+
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI matrícula',300,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI marzo',300,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI abril',300,'2020-04-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI mayo',300,'2020-05-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI junio',300,'2020-06-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI julio',300,'2020-07-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI agosto',300,'2020-08-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI setiembre',300,'2020-09-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI octubre',300,'2020-10-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI noviembre',300,'2020-11-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI diciembre',300,'2020-12-31');
+
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI matrícula',450,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI marzo',450,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI abril',450,'2020-04-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI mayo',450,'2020-05-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI junio',450,'2020-06-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI julio',450,'2020-07-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI agosto',450,'2020-08-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI setiembre',450,'2020-09-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI octubre',450,'2020-10-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI noviembre',450,'2020-11-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI diciembre',450,'2020-12-31');
+
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC matrícula',540,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC marzo',540,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC abril',540,'2020-04-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC mayo',540,'2020-05-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC junio',540,'2020-06-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC julio',540,'2020-07-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC agosto',540,'2020-08-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC setiembre',540,'2020-09-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC octubre',540,'2020-10-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC noviembre',540,'2020-11-30');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC diciembre',540,'2020-12-31');
+
+CREATE FUNCTION last() RETURNS integer AS $$
+    select max(nid_persona) from persona;
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION lastNivel() RETURNS text AS $$
+    SELECT G.nivel FROM persona P, grado G where P.nid_grado=G.nid_grado and P.nid_persona=last();
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION detalles() RETURNS SETOF detalle_cronograma AS $$
+    SELECT * from detalle_cronograma WHERE substring(desc_pension from 1 for 3)=lastNivel();
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION id_detalles() RETURNS SETOF integer AS $$
+    SELECT id_detalle_cronograma from detalle_cronograma WHERE substring(desc_pension from 1 for 3)=lastNivel();
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION last_monto() RETURNS DECIMAL AS $$
+    SELECT max(monto) from detalle_cronograma WHERE substring(desc_pension from 1 for 3)=lastNivel();
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION insertarPagos() RETURNS void AS $$
+DECLARE rec RECORD;
+BEGIN
+    FOR rec IN (SELECT * from detalle_cronograma WHERE substring(desc_pension from 1 for 3)=lastNivel()) LOOP
+        RAISE INFO '%', rec;
+        insert into movimiento VALUES(DEFAULT,'INGRESO',last_monto(),'POR PAGAR',null,last(),rec.id_detalle_cronograma);
+        RAISE INFO 'DONE';
+    END LOOP;
+END;
+$$ LANGUAGE PLPGSQL;

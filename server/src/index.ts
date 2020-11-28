@@ -5,6 +5,7 @@ import cors from 'cors';
 import indexRoutes from './routes/indexRoutes';
 import estudiantesRoutes from './routes/estudiantesRoutes';
 import gradosRoutes from './routes/gradosRoutes';
+import pagosRoutes from './routes/pagosRoutes';
 
 class Server{
     
@@ -28,6 +29,7 @@ class Server{
         this.app.use('/',indexRoutes);
         this.app.use('/api/students',estudiantesRoutes);
         this.app.use('/api/grados',gradosRoutes);
+        this.app.use('/api/pagos',pagosRoutes);
     }
 
     start():void{
