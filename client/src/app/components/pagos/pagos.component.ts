@@ -1,4 +1,4 @@
-import { Component, OnInit,DoCheck } from '@angular/core';
+import { Component, OnInit,DoCheck,AfterContentChecked,AfterViewChecked } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {BuscarComponent} from '../buscar/buscar.component';
 
@@ -19,10 +19,6 @@ export class PagosComponent implements OnInit {
   constructor(public dialog: MatDialog,public datosService:DatosService, private pagosService:PagosService) { }
 
   ngOnInit(): void {
-    
-  }
-
-  ngDoCheck(): void {
     if(this.datosService.studentSelected!==0){
       this.pagosService.list(this.datosService.studentSelected).subscribe(
         res=>{
@@ -31,7 +27,22 @@ export class PagosComponent implements OnInit {
         err=>console.error(err)
     );
     }
+  }
+
+  ngDoCheck(): void {
     
+    
+  }
+
+  ngAfterViewChecked(): void {
+    if(this.datosService.studentSelected!==0){
+      this.pagosService.list(this.datosService.studentSelected).subscribe(
+        res=>{
+            this.dataSource=res;
+        },
+        err=>console.error(err)
+    );
+    }
   }
 
   buscar(){

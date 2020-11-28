@@ -56,7 +56,7 @@ insert into grado values (default,'Quinto','SEC');
 
 insert into cronograma values (default,2020);
 
-insert into detalle_cronograma VALUES(DEFAULT,1,'INI matrícula',300,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'INI matrícula',300,'2020-03-30');
 insert into detalle_cronograma VALUES(DEFAULT,1,'INI marzo',300,'2020-03-31');
 insert into detalle_cronograma VALUES(DEFAULT,1,'INI abril',300,'2020-04-30');
 insert into detalle_cronograma VALUES(DEFAULT,1,'INI mayo',300,'2020-05-31');
@@ -68,7 +68,7 @@ insert into detalle_cronograma VALUES(DEFAULT,1,'INI octubre',300,'2020-10-31');
 insert into detalle_cronograma VALUES(DEFAULT,1,'INI noviembre',300,'2020-11-30');
 insert into detalle_cronograma VALUES(DEFAULT,1,'INI diciembre',300,'2020-12-31');
 
-insert into detalle_cronograma VALUES(DEFAULT,1,'PRI matrícula',450,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'PRI matrícula',450,'2020-03-30');
 insert into detalle_cronograma VALUES(DEFAULT,1,'PRI marzo',450,'2020-03-31');
 insert into detalle_cronograma VALUES(DEFAULT,1,'PRI abril',450,'2020-04-30');
 insert into detalle_cronograma VALUES(DEFAULT,1,'PRI mayo',450,'2020-05-31');
@@ -80,7 +80,7 @@ insert into detalle_cronograma VALUES(DEFAULT,1,'PRI octubre',450,'2020-10-31');
 insert into detalle_cronograma VALUES(DEFAULT,1,'PRI noviembre',450,'2020-11-30');
 insert into detalle_cronograma VALUES(DEFAULT,1,'PRI diciembre',450,'2020-12-31');
 
-insert into detalle_cronograma VALUES(DEFAULT,1,'SEC matrícula',540,'2020-03-31');
+insert into detalle_cronograma VALUES(DEFAULT,1,'SEC matrícula',540,'2020-03-30');
 insert into detalle_cronograma VALUES(DEFAULT,1,'SEC marzo',540,'2020-03-31');
 insert into detalle_cronograma VALUES(DEFAULT,1,'SEC abril',540,'2020-04-30');
 insert into detalle_cronograma VALUES(DEFAULT,1,'SEC mayo',540,'2020-05-31');
@@ -126,3 +126,36 @@ $$ LANGUAGE PLPGSQL;
 CREATE FUNCTION mes(id INTEGER) returns text as $$
     SELECT 	substring(desc_pension from 5 for char_length(desc_pension)-4) from detalle_cronograma WHERE id_detalle_cronograma=id;
 $$ LANGUAGE SQL;
+
+CREATE FUNCTION matricular1() RETURNS void AS $$
+DECLARE rec RECORD;
+BEGIN
+    FOR rec IN (SELECT * from detalle_cronograma WHERE substring(desc_pension from 1 for 3)=lastNivel() and mes(id_detalle_cronograma)='matrícula') LOOP
+        RAISE INFO '%', rec;
+        insert into movimiento VALUES(DEFAULT,'INGRESO',last_monto(),'PAGADO',null,last(),rec.id_detalle_cronograma);
+        RAISE INFO 'DONE';
+    END LOOP;
+END;
+$$ LANGUAGE PLPGSQL;
+
+CREATE FUNCTION matricular2() RETURNS void AS $$
+DECLARE rec RECORD;
+BEGIN
+    FOR rec IN (SELECT * from detalle_cronograma WHERE substring(desc_pension from 1 for 3)=lastNivel() and mes(id_detalle_cronograma) != 'matrícula' and DATE(fecha_venci) -current_date>=0) LOOP
+        RAISE INFO '%', rec;
+        insert into movimiento VALUES(DEFAULT,'INGRESO',last_monto(),'POR PAGAR',null,last(),rec.id_detalle_cronograma);
+        RAISE INFO 'DONE';
+    END LOOP;
+END;
+$$ LANGUAGE PLPGSQL;
+
+CREATE FUNCTION matricular3() RETURNS void AS $$
+DECLARE rec RECORD;
+BEGIN
+    FOR rec IN (SELECT * from detalle_cronograma WHERE substring(desc_pension from 1 for 3)=lastNivel() and mes(id_detalle_cronograma)!='matrícula' and DATE(fecha_venci) -current_date<0) LOOP
+        RAISE INFO '%', rec;
+        insert into movimiento VALUES(DEFAULT,'INGRESO',last_monto(),'ANULADO',null,last(),rec.id_detalle_cronograma);
+        RAISE INFO 'DONE';
+    END LOOP;
+END;
+$$ LANGUAGE PLPGSQL;
