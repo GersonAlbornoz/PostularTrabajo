@@ -12,11 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteStudent = exports.create = exports.names = exports.list = void 0;
+exports.deleteStudent = exports.create = exports.names = exports.one = exports.list = void 0;
 const database_1 = __importDefault(require("../database"));
 exports.list = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield database_1.default.query('SELECT P.nid_persona,P.nom_persona,P.ape_pate_pers,P.ape_mate_pers,P.fecha_naci,P.foto_ruta,G.nivel,G.desc_grado FROM persona P, grado G where P.nid_grado=G.nid_grado order by P.nid_persona');
+        return res.status(200).json(response.rows);
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(500).json('Internal Server error');
+    }
+});
+exports.one = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = parseInt(req.params.id);
+        const response = yield database_1.default.query('SELECT nom_persona,ape_pate_pers,ape_mate_pers,foto_ruta FROM persona where nid_persona=$1', [id]);
         return res.status(200).json(response.rows);
     }
     catch (e) {

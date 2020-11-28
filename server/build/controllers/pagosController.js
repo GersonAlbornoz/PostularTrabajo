@@ -55,7 +55,7 @@ exports.anular = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.list = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = parseInt(req.params.id);
-        const response = yield database_1.default.query('SELECT M.id_movimiento,M.monto,M.estado, mes(M.id_detalle_cronograma),false as checked,M.estado!=$1 and M.estado!=$2  as notdisabled FROM movimiento M,detalle_cronograma D where M.id_detalle_cronograma=D.id_detalle_cronograma and id_persona = $3 order by D.fecha_venci', ['PAGADO', 'ANULADO', id]);
+        const response = yield database_1.default.query('SELECT M.id_movimiento,M.id_persona,M.monto,M.estado,Date(D.fecha_venci) as fecha_venci, mes(M.id_detalle_cronograma),false as checked,M.estado!=$1 and M.estado!=$2  as notdisabled FROM movimiento M,detalle_cronograma D where M.id_detalle_cronograma=D.id_detalle_cronograma and id_persona = $3 order by D.fecha_venci', ['PAGADO', 'ANULADO', id]);
         return res.status(200).json(response.rows);
     }
     catch (e) {

@@ -1,5 +1,6 @@
 import { Component, OnInit,DoCheck,AfterContentChecked,AfterViewChecked } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+
 import {BuscarComponent} from '../buscar/buscar.component';
 
 import {DatosService} from '../../services/datos.service';

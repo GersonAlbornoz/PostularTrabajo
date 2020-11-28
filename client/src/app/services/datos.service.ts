@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 export class DatosService {
 
   studentSelected:number=0;
+  a_pagar:any[]=[];
 
   constructor() { }
 
@@ -16,5 +17,13 @@ export class DatosService {
   }
   getStudent():number{
     return this.studentSelected;
+  }
+  agregarPagos(n:any):number{
+    this.a_pagar.push(n);
+    return 0;
+  }
+  limpiarPagos():number{
+    this.a_pagar=[];
+    return 0;
   }
 }

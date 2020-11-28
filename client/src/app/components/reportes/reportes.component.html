@@ -1,5 +1,5 @@
-<button mat-raised-button id="btn1" color="warn" (click)="anular()">Anular</button>
-<button mat-raised-button id="btn1" color="primary" (click)="pagar()">Pagar</button>
+<button mat-raised-button id="btn1" color="warn" (click)="anular()" [disabled]="buttonDisabled()">Anular</button>
+<button mat-raised-button id="btn1" color="primary" (click)="pagar()" [disabled]="buttonDisabled()">Pagar</button>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <ng-container matColumnDef="position">

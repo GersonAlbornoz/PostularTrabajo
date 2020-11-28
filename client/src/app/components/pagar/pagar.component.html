@@ -1,0 +1,40 @@
+<table>
+    <td>
+        <img id="imagen" [src]="students[0].foto_ruta">
+    </td>
+    <td>
+        <h2>{{students[0].nom_persona}} {{students[0].ape_pate_pers}}</h2>
+    </td>
+</table>
+<hr>
+<table mat-table [dataSource]="datosService.a_pagar" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> Pensión </th>
+        <td mat-cell *matCellDef="let element"> {{element.mes}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Fecha de Vencimiento </th>
+        <td mat-cell *matCellDef="let element"> {{element.fecha_venci.substring(0,10)}}</td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef> Monto </th>
+        <td mat-cell *matCellDef="let element"> {{element.monto+'.00'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<table>
+    <tr>
+        <td>
+            <h3>Total ${{total}}.00</h3>
+        </td>
+        <td>
+            <button mat-raised-button id="btn1" color="primary" (click)="pagar()">Pagar</button>
+        </td>
+    </tr>
+</table>

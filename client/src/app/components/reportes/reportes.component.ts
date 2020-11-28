@@ -1,4 +1,7 @@
 import { Component, OnInit,AfterViewChecked,OnChanges } from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+
+import {PagarComponent} from '../pagar/pagar.component';
 
 import {DatosService} from '../../services/datos.service';
 import {PagosService} from '../../services/pagos.service';
@@ -14,7 +17,7 @@ export class ReportesComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource:any=[];
   mesActual:number;
-  constructor(public datosService:DatosService,private pagosService:PagosService) { }
+  constructor(public dialog: MatDialog,public datosService:DatosService,private pagosService:PagosService) { }
 
   ngOnInit(): void {
     this.actualizar();
@@ -48,7 +51,16 @@ export class ReportesComponent implements OnInit {
   }
 
   pagar(){
-
+    for(let i of this.dataSource){
+      if(i.checked){
+        let n=this.datosService.agregarPagos(i);
+      }
+    }
+    const dialogRef = this.dialog.open(PagarComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      let n=this.datosService.limpiarPagos();
+      this.actualizar();
+    });
   }
 
   actualizar(){
@@ -86,5 +98,13 @@ export class ReportesComponent implements OnInit {
         );
       }
     }
+  }
+  buttonDisabled():boolean{
+    for(let i of this.dataSource){
+      if(i.checked){
+        return false;
+      }
+    }
+    return true;
   }
 }

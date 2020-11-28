@@ -14,6 +14,9 @@ export class EstudiantesService {
   getAll(){
     return this.http.get(this.API_URL);
   }
+  getOne(id:number){
+    return this.http.get(this.API_URL+'/'+id);
+  }
   create(student:Student){
     return this.http.post(this.API_URL,student);
   }

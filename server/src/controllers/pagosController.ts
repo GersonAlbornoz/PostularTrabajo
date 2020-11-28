@@ -46,7 +46,7 @@ export const anular = async(req:Request,res:Response): Promise<Response> => {
 export const list = async(req:Request,res:Response): Promise<Response> => {
     try{
         const id= parseInt(req.params.id);
-        const response:QueryResult=await pool.query('SELECT M.id_movimiento,M.monto,M.estado, mes(M.id_detalle_cronograma),false as checked,M.estado!=$1 and M.estado!=$2  as notdisabled FROM movimiento M,detalle_cronograma D where M.id_detalle_cronograma=D.id_detalle_cronograma and id_persona = $3 order by D.fecha_venci',['PAGADO','ANULADO',id]);
+        const response:QueryResult=await pool.query('SELECT M.id_movimiento,M.id_persona,M.monto,M.estado,Date(D.fecha_venci) as fecha_venci, mes(M.id_detalle_cronograma),false as checked,M.estado!=$1 and M.estado!=$2  as notdisabled FROM movimiento M,detalle_cronograma D where M.id_detalle_cronograma=D.id_detalle_cronograma and id_persona = $3 order by D.fecha_venci',['PAGADO','ANULADO',id]);
         return res.status(200).json(response.rows);
     }
     catch(e){

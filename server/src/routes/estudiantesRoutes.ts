@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {list,create,deleteStudent,names} from '../controllers/estudiantesController'
+import {list,create,deleteStudent,names,one} from '../controllers/estudiantesController'
 
 class EstudiantesRoutes{
 
@@ -11,6 +11,7 @@ class EstudiantesRoutes{
 
     config():void{
         this.router.get('/',list);
+        this.router.get('/:id',one);
         this.router.get('/names',names);
         this.router.post('/',create);
         this.router.delete('/:id',deleteStudent);

@@ -15,6 +15,7 @@ import { PagosComponent } from './components/pagos/pagos.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { AddEstudiantesComponent } from './components/add-estudiantes/add-estudiantes.component';
 import { BuscarComponent } from './components/buscar/buscar.component';
+import { PagarComponent } from './components/pagar/pagar.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { BuscarComponent } from './components/buscar/buscar.component';
     PagosComponent,
     ReportesComponent,
     AddEstudiantesComponent,
-    BuscarComponent
+    BuscarComponent,
+    PagarComponent
   ],
   imports: [
     BrowserModule,

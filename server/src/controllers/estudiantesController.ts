@@ -13,6 +13,18 @@ export const list = async(req:Request,res:Response): Promise<Response> => {
     }
 }
 
+export const one = async(req:Request,res:Response): Promise<Response> => {
+    try{
+        const id= parseInt(req.params.id);
+        const response:QueryResult=await pool.query('SELECT nom_persona,ape_pate_pers,ape_mate_pers,foto_ruta FROM persona where nid_persona=$1',[id]);
+        return res.status(200).json(response.rows);
+    }
+    catch(e){
+        console.log(e);
+        return res.status(500).json('Internal Server error');
+    }
+}
+
 export const names = async(req:Request,res:Response): Promise<Response> => {
     try{
         const response:QueryResult=await pool.query('SELECT nom_persona FROM persona order by nom_persona');

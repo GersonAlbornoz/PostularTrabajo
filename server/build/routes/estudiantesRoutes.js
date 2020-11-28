@@ -9,6 +9,7 @@ class EstudiantesRoutes {
     }
     config() {
         this.router.get('/', estudiantesController_1.list);
+        this.router.get('/:id', estudiantesController_1.one);
         this.router.get('/names', estudiantesController_1.names);
         this.router.post('/', estudiantesController_1.create);
         this.router.delete('/:id', estudiantesController_1.deleteStudent);
