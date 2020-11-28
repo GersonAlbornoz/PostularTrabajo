@@ -20,7 +20,21 @@ export const pagar = async(req:Request,res:Response): Promise<Response> => {
         const id= parseInt(req.params.id);
         const response:QueryResult=await pool.query('update movimiento set estado=$1 where id_movimiento=$2;',['PAGADO',id]);
         return res.json({
-            message:'Movimientos insertados'
+            message:'Pagados'
+        })
+    }
+    catch(e){
+        console.log(e);
+        return res.status(500).json('Internal Server error');
+    }
+}
+
+export const anular = async(req:Request,res:Response): Promise<Response> => {
+    try{
+        const id= parseInt(req.params.id);
+        const response:QueryResult=await pool.query('update movimiento set estado=$1 where id_movimiento=$2;',['ANULADO',id]);
+        return res.json({
+            message:'Anulados'
         })
     }
     catch(e){

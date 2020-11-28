@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mes = exports.list = exports.pagar = exports.insertar = void 0;
+exports.mes = exports.list = exports.anular = exports.pagar = exports.insertar = void 0;
 const database_1 = __importDefault(require("../database"));
 exports.insertar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -31,7 +31,20 @@ exports.pagar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const id = parseInt(req.params.id);
         const response = yield database_1.default.query('update movimiento set estado=$1 where id_movimiento=$2;', ['PAGADO', id]);
         return res.json({
-            message: 'Movimientos insertados'
+            message: 'Pagados'
+        });
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(500).json('Internal Server error');
+    }
+});
+exports.anular = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = parseInt(req.params.id);
+        const response = yield database_1.default.query('update movimiento set estado=$1 where id_movimiento=$2;', ['ANULADO', id]);
+        return res.json({
+            message: 'Anulados'
         });
     }
     catch (e) {

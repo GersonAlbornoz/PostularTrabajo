@@ -17,26 +17,7 @@ export class ReportesComponent implements OnInit {
   constructor(public datosService:DatosService,private pagosService:PagosService) { }
 
   ngOnInit(): void {
-    this.pagosService.list(12).subscribe(
-      res=>{
-          this.dataSource=res;
-          let c:number=0;
-          let n:number=0;
-          for(let i of this.dataSource){
-            if(i.notdisabled){
-              if(n===0){
-                this.mesActual=c;
-              }else{
-                i.notdisabled=false;
-              }
-              n++;
-            }
-            c++;
-          }
-          
-      },
-      err=>console.error(err)
-  );
+    this.actualizar();
   }
   capital(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -63,6 +44,47 @@ export class ReportesComponent implements OnInit {
       }
     }
     c++;
+    }
+  }
+
+  pagar(){
+
+  }
+
+  actualizar(){
+    this.pagosService.list(12).subscribe(
+      res=>{
+          this.dataSource=res;
+          let c:number=0;
+          let n:number=0;
+          for(let i of this.dataSource){
+            if(i.notdisabled){
+              if(n===0){
+                this.mesActual=c;
+              }else{
+                i.notdisabled=false;
+              }
+              n++;
+            }
+            c++;
+          }
+          
+      },
+      err=>console.error(err)
+  );
+  }
+  anular(){
+    for(let i of this.dataSource){
+      if(i.checked){
+        this.pagosService.anular(i.id_movimiento).subscribe(
+          res=>{
+            
+        console.log(i)
+        this.actualizar();
+        },
+        err=>console.error(err)
+        );
+      }
     }
   }
 }

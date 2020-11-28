@@ -19,4 +19,10 @@ export class PagosService {
   mes(n:number){
     return this.http.get(this.API_URL+'/mes/'+n);
   }
+  pagar(n:number){
+    return this.http.get(this.API_URL+'/pagar/'+n);
+  }
+  anular(n:number){
+    return this.http.get(this.API_URL+'/anular/'+n);
+  }
 }
