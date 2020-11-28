@@ -1,7 +1,10 @@
 import { Component, OnInit,HostBinding } from '@angular/core';
-import { GradosService} from '../../services/grados.service';
+
 import {Student} from '../../modules/Student';
+
 import {EstudiantesService} from '../../services/estudiantes.service';
+import { GradosService} from '../../services/grados.service';
+import {PagosService} from '../../services/pagos.service';
 
 @Component({
   selector: 'app-add-estudiantes',
@@ -21,7 +24,9 @@ export class AddEstudiantesComponent implements OnInit {
     nace:new Date(),
     foto:''
   }
-  constructor(private gradosService:GradosService,private estudiantesService:EstudiantesService) { }
+  constructor(private gradosService:GradosService,
+    private estudiantesService:EstudiantesService,
+    private pagosService:PagosService) { }
 
   ngOnInit(): void {
     this.gradosService.getAll().subscribe(
@@ -80,6 +85,12 @@ export class AddEstudiantesComponent implements OnInit {
     this.estudiantesService.create(this.alumno).subscribe(
       res =>{
         console.log(res)
+        this.pagosService.insertar(0).subscribe(
+          res =>{
+            console.log(res)
+          },
+          err => console.error(err)
+        )
           this.alumno.fname='';
           this.alumno.lname1='';
           this.alumno.lname2='';

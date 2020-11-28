@@ -122,3 +122,7 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE PLPGSQL;
+
+CREATE FUNCTION mes(id INTEGER) returns text as $$
+    SELECT 	substring(desc_pension from 5 for char_length(desc_pension)-4) from detalle_cronograma WHERE id_detalle_cronograma=id;
+$$ LANGUAGE SQL;

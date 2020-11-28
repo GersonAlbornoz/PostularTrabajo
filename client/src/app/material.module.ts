@@ -16,7 +16,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatRadioModule} from '@angular/material/radio';
-
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
     imports: [
@@ -34,7 +34,8 @@ import {MatRadioModule} from '@angular/material/radio';
         ReactiveFormsModule,
         MatTableModule,
         MatPaginatorModule,
-        MatRadioModule
+        MatRadioModule,
+        MatCheckboxModule
     ],  
     exports: [
         MatTabsModule,
@@ -51,7 +52,8 @@ import {MatRadioModule} from '@angular/material/radio';
         ReactiveFormsModule,
         MatTableModule,
         MatPaginatorModule,
-        MatRadioModule
+        MatRadioModule,
+        MatCheckboxModule
     ]
 })
 export class MaterialModule {}

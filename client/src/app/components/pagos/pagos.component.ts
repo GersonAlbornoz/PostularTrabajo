@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,DoCheck } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {BuscarComponent} from '../buscar/buscar.component';
 
 import {DatosService} from '../../services/datos.service';
+import {PagosService} from '../../services/pagos.service';
 
 @Component({
   selector: 'app-pagos',
@@ -12,10 +13,24 @@ import {DatosService} from '../../services/datos.service';
 export class PagosComponent implements OnInit {
 
   selectedStudent:number;
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  dataSource:any=[];
 
-  constructor(public dialog: MatDialog,public datosService:DatosService) { }
+  constructor(public dialog: MatDialog,public datosService:DatosService, private pagosService:PagosService) { }
 
   ngOnInit(): void {
+    
+  }
+
+  ngDoCheck(): void {
+    if(this.datosService.studentSelected!==0){
+      this.pagosService.list(this.datosService.studentSelected).subscribe(
+        res=>{
+            this.dataSource=res;
+        },
+        err=>console.error(err)
+    );
+    }
     
   }
 
@@ -26,4 +41,9 @@ export class PagosComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  capital(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
 }

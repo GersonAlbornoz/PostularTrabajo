@@ -9,6 +9,8 @@ class GradosRoutes {
     }
     config() {
         this.router.get('/insertar', pagosController_1.insertar);
+        this.router.get('/:id', pagosController_1.list);
+        this.router.get('/mes/:id', pagosController_1.mes);
     }
 }
 const gradosRoutes = new GradosRoutes();
