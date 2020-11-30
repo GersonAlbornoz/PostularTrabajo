@@ -4,5 +4,5 @@ export interface Student{
     lname2?:string;
     grado?:number;
     nace?:Date;
-    foto?:string;
+    image?:File;
 }

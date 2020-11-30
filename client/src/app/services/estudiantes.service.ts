@@ -17,7 +17,14 @@ export class EstudiantesService {
   getOne(id:number){
     return this.http.get(this.API_URL+'/'+id);
   }
-  create(student:Student){
-    return this.http.post(this.API_URL,student);
+  create(student:Student,foto:File){
+    const fd = new FormData();
+    fd.append('fname',student.fname);
+    fd.append('lname1',student.lname1);
+    fd.append('lname2',student.lname2);
+    fd.append('grado', JSON.stringify(student.grado) );
+    fd.append('nace',JSON.stringify(student.nace));
+    fd.append('image',foto);
+    return this.http.post(this.API_URL,fd);
   }
 }

@@ -54,10 +54,16 @@
     <tr>
         <td>
             <form>
-                <mat-form-field>
-                    <input matInput placeholder="Link de foto" [(ngModel)]="alumno.foto" name="foto">
-                </mat-form-field>
+
+                <input type="file" (change)="onPhotoSelected($event)" #photoInput>
+
             </form>
+        </td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>
         </td>
         <td>
             <button mat-raised-button id="btn2" color="primary" (click)="agregar()">

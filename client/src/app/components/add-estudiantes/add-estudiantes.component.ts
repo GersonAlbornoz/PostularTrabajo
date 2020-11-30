@@ -6,6 +6,10 @@ import {EstudiantesService} from '../../services/estudiantes.service';
 import { GradosService} from '../../services/grados.service';
 import {PagosService} from '../../services/pagos.service';
 
+interface HtmlInputEvent extends Event{
+  target:HTMLInputElement & EventTarget;
+}
+
 @Component({
   selector: 'app-add-estudiantes',
   templateUrl: './add-estudiantes.component.html',
@@ -15,6 +19,8 @@ export class AddEstudiantesComponent implements OnInit {
 
   @HostBinding('class') classes ='row';
 
+  file:File;
+  photoSelected:string | ArrayBuffer;
   grados:any=[];
   alumno:Student={
     fname:'',
@@ -22,7 +28,7 @@ export class AddEstudiantesComponent implements OnInit {
     lname2:'',
     grado:0,
     nace:new Date(),
-    foto:''
+    image:null
   }
   constructor(private gradosService:GradosService,
     private estudiantesService:EstudiantesService,
@@ -82,7 +88,7 @@ export class AddEstudiantesComponent implements OnInit {
   }
 
   agregar(){
-    this.estudiantesService.create(this.alumno).subscribe(
+    this.estudiantesService.create(this.alumno,this.file).subscribe(
       res =>{
         console.log(res)
         this.pagosService.insertar(0).subscribe(
@@ -96,9 +102,19 @@ export class AddEstudiantesComponent implements OnInit {
           this.alumno.lname2='';
           this.alumno.grado=0;
           this.alumno.nace=new Date();
-          this.alumno.foto='';
+          this.alumno.image=null;
+          this.file=null;
       },
       err => console.error(err)
     )
+  }
+
+  onPhotoSelected(event:HtmlInputEvent):void{
+    if(event.target.files && event.target.files[0]){
+      this.file=<File>event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = e =>this.photoSelected=reader.result;
+      reader.readAsDataURL(this.file);
+    }
   }
 }
