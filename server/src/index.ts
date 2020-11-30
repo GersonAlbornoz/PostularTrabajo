@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
+import path from 'path';
 
 import indexRoutes from './routes/indexRoutes';
 import estudiantesRoutes from './routes/estudiantesRoutes';
@@ -30,6 +31,8 @@ class Server{
         this.app.use('/api/students',estudiantesRoutes);
         this.app.use('/api/grados',gradosRoutes);
         this.app.use('/api/pagos',pagosRoutes);
+
+        this.app.use('uploads',express.static(path.resolve('uploads')));
     }
 
     start():void{

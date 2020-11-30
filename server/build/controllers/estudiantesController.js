@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteStudent = exports.create = exports.names = exports.one = exports.list = void 0;
+exports.deleteStudent = exports.createPhoto = exports.create = exports.names = exports.one = exports.list = void 0;
 const database_1 = __importDefault(require("../database"));
 exports.list = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -47,8 +47,17 @@ exports.names = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { fname, lname1, lname2, grado, nace, foto } = req.body;
-        const response = yield database_1.default.query('INSERT INTO persona VALUES (DEFAULT,$1,$2,$3,$4,$5,$6)', [fname, lname1, lname2, grado, nace, foto]);
+        const { fname, lname1, lname2, grado, nace } = req.body;
+        const newPhoto = {
+            fname: fname,
+            lname1: lname1,
+            lname2: lname2,
+            grado: grado,
+            nace: nace,
+            foto: req.file.path
+        };
+        console.log(req.file);
+        const response = yield database_1.default.query('INSERT INTO persona VALUES (DEFAULT,$1,$2,$3,$4,$5,$6)', [newPhoto.fname, newPhoto.lname1, newPhoto.lname2, newPhoto.grado, nace, newPhoto.foto]);
         return res.json({
             message: 'Estudiante Guardado'
         });
@@ -58,6 +67,19 @@ exports.create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(500).json('Internal Server error');
     }
 });
+function createPhoto(req, res) {
+    const { title, description } = req.body;
+    console.log(req.file.path);
+    const newPhoto = {
+        title: title,
+        description: description,
+        imagePath: req.file.path
+    };
+    return res.json({
+        message: 'Photo saved'
+    });
+}
+exports.createPhoto = createPhoto;
 exports.deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = parseInt(req.params.id);

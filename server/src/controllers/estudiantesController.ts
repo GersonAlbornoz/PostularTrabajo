@@ -38,8 +38,17 @@ export const names = async(req:Request,res:Response): Promise<Response> => {
 
 export const create = async(req:Request,res:Response): Promise<Response> => {
     try{
-        const {fname,lname1,lname2,grado,nace,foto} = req.body;
-        const response:QueryResult=await pool.query('INSERT INTO persona VALUES (DEFAULT,$1,$2,$3,$4,$5,$6)',[fname,lname1,lname2,grado,nace,foto]);
+        const {fname,lname1,lname2,grado,nace} = req.body;
+        const newPhoto={
+            fname:fname,
+            lname1:lname1,
+            lname2:lname2,
+            grado:grado,
+            nace:nace,
+            foto:req.file.path
+        }
+        console.log(req.file);
+        const response:QueryResult=await pool.query('INSERT INTO persona VALUES (DEFAULT,$1,$2,$3,$4,$5,$6)',[newPhoto.fname,newPhoto.lname1,newPhoto.lname2,newPhoto.grado,nace,newPhoto.foto]);
         return res.json({
             message:'Estudiante Guardado'
         })
@@ -48,6 +57,19 @@ export const create = async(req:Request,res:Response): Promise<Response> => {
         console.log(e);
         return res.status(500).json('Internal Server error');
     }
+}
+
+export function createPhoto(req:Request,res:Response){
+    const{title,description}=req.body;
+    console.log(req.file.path);
+    const newPhoto={
+        title:title,
+        description:description,
+        imagePath:req.file.path
+    }
+    return res.json({
+        message:'Photo saved'
+    })
 }
 
 export const deleteStudent = async(req:Request,res:Response): Promise<Response> => {
